@@ -6,11 +6,12 @@ const MCar = 4
 PASSENGERS = (newPassenger -> PASSENGERS).
 
 // limits passengers on platfrom to Max & allocates passengers to cars
+// goNow allows car to take all current waiting persons
 CONTROLLER = CONTROL[0][0],
 CONTROL[count:0..Max][carSize:0..MCar]  = (when (count < Max) newPassenger  -> CONTROL[count+1][carSize]
       |requestPassenger[n:1..MCar] -> CONTROL[count][n]
       |when (carSize > 0 && count >= carSize) getPassenger[carSize] -> CONTROL[count-carSize][0] 
-	  |when (carSize > 0 && count > 0 && count < carSize) goNow -> getPassenger[count] -> CONTROL[0][0]
+	  |when (carSize > 0 && count > 0 && count < carSize) goNow-> getPassenger[count] ->  CONTROL[0][0]
       ).
 
 // the coaster car requests N passengers and departs when the
@@ -20,7 +21,7 @@ COASTERCAR(N=MCar) = (arrive -> requestPassenger[N] -> getPassenger[i:1..N] ->
       +{{requestPassenger,getPassenger}[1..MCar]}.
 
 // controls access to the platform
-PLATFORMACCESS = ({arrive,depart} -> PLATFORMACCESS).
+PLATFORMACCESS = (arrive -> depart -> PLATFORMACCESS).
 
 //button as requested in the exercise, enables car to go early if so required. 
 BUTTON  = (goNow ->BUTTON).
@@ -32,4 +33,4 @@ BUTTON  = (goNow ->BUTTON).
            	|| car[2]:COASTERCAR(3)
 			|| BUTTON
            )
-           /{newPassenger/car[1..2].newPassenger}.
+           /{newPassenger/car[1..2].newPassenger,goNow/car[1..2].goNow}.
