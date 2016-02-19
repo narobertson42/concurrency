@@ -1,6 +1,6 @@
 public class PlatformAccess {
 
-	protected boolean in_use=false;
+	protected boolean in_use;
   /* declarations required */
 
   public synchronized void arrive() throws InterruptedException {
@@ -13,8 +13,9 @@ public class PlatformAccess {
   }
 
   public synchronized void depart(){
+	  if (in_use){
 	  in_use = false;
-	  notifyAll();
+	  notifyAll();}
     // complete implementation
   }
 

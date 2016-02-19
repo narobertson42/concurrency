@@ -8,12 +8,12 @@ public class Controller {
 
 	public static int Max = 9;
 	protected NumberCanvas passengers;
-	int numpass = 0;
-
-	// declarations required
+	protected int numpass = 0;
+	protected boolean button;
 
 	public Controller(NumberCanvas nc) {
 		passengers = nc;
+		button = false;
 	}
 
 	public synchronized void newPassenger() throws InterruptedException {
@@ -26,13 +26,17 @@ public class Controller {
 	}
 
 	public synchronized int getPassengers(int mcar) throws InterruptedException {
-		if (mcar > 0) {
+		if (mcar >= 0) {
 
-			while (numpass < mcar) {
+			while ((numpass < mcar) && (!button)){
 				wait();
 			}
 
+			if (numpass < mcar && button) {
+				mcar = numpass;
+			}
 			numpass -= mcar;
+			button = false;
 
 			passengers.setValue(numpass);
 
@@ -45,7 +49,10 @@ public class Controller {
 	}
 
 	public synchronized void goNow() {
-		// complete implementation for part II
+		if (0 < numpass) {
+			button = true;
+		}
+		notifyAll();
 	}
 
 }

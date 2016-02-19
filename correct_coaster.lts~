@@ -19,7 +19,7 @@ COASTERCAR(N=MCar) = (arrive -> requestPassenger[N] -> getPassenger[i:1..MCar] -
       +{{requestPassenger,getPassenger}[1..MCar]}.
 
 // controls access to the platform
-PLATFORMACCESS = (arrive -> depart -> PLATFORMACCESS). //Need to seperate the actions
+PLATFORMACCESS = (arrive -> depart -> PLATFORMACCESS).
 
 // system with two coaster cars with capacity two and three
 ||ROLLERCOASTER = (PASSENGERS 
